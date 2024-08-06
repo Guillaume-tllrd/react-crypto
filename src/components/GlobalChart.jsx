@@ -4,6 +4,24 @@ import { Tooltip, Treemap } from 'recharts';
 const GlobalChart = ({coinsdata}) => {
 // on va faire un graphic de type treeMap qu'on récupère sur une librairie(recharts) il faut la télécharger(npm i recharts)
 const [dataArray, setDataArray] = useState([]);
+const [color, setColor] = useState("")
+// on fait une function pour les culeurs en fonction des résultats des crypto:
+function colorPicker(number){
+    if(number >= 20){
+        return setColor("rgb(0, 183, 179)")
+    } else if(number >= 5){
+        return setColor("rgb(0, 253, 148)");
+    } else if(number >=0){
+        return setColor("rgb(2, 172, 81)")
+    } else if(number >+ -5){
+        return setColor("rgb(255, 111, 86)")
+    } else if(number>= -20){
+        return setColor("rgb(251, 69, 63)")
+    } else {
+        return setColor("rgb(10, 10, 10)")
+    }
+    // TERMINER A 1:10:00
+}
 useEffect(() => {
     let chartData = [];
 // on récup la data , on instancie un tableau et on va lui push la data si il y en + que 0 et ensuite jusqu'à 45. On récupère son symbol en MAJ etc..
@@ -12,7 +30,7 @@ useEffect(() => {
             chartData.push({
                 name: coinsdata[i].symbol.toUpperCase() + " " + coinsdata[i].market_cap_change_percentage_24h.toFixed(1) + "%",
                 size: coinsdata[i].market_cap,
-                fill: null,
+                fill: colorPicker(coinsdata[i].price_change_percentage_24h),
 
             });
         }
@@ -23,7 +41,7 @@ useEffect(() => {
 // tu relances le useeffect qd coinsdata évolue
 
 // pour faire un hover au survoles des crypto: il faut déclarer une fonction: 
-// si tu es actif cad qu'on te survole et que tu as les info(payload) et sa loguer alors on se code le petit carré(custom-tooltip) et on lui donne les infos: nom. Ensuite on va l'insérer dans le composant Treemap
+// si tu es actif cad qu'on te survole et que tu as les info(payload) et sa longueur alors on se code le petit carré(custom-tooltip) et on lui donne les infos: nom. Ensuite on va l'insérer dans le composant Treemap
 const TreemapToolTip = ({active, payload}) => {
     if(active && payload && payload.length){
         // ne pas oublier le return
