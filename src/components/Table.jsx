@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
+import Tableline from './TableLine';
+
+
 
 const Table = ({coinsData}) => {
     const [rangeNumber, setrangeNumber] = useState(100);
     // on créer une var pour trier, qd on clique sur un bouton on aura le nom du tri que l'on souhaite
     const [orderBy, setOrderBy] = useState("");
     // on va map tous les header du tabeau(qui seront des input de type radio) donc on les mets dans un array:
-    const tableHeader = ["Prix", "MarketCap", "Volume", "1h", "1j", "1m", "6m", "1a", "ATH"]
+    const tableHeader = ["Prix", "MarketCap", "Volume", "1h", "1j", "1s", "1m", "6m", "1a", "ATH"]
     
     return (
         <div className='table-container'>
-            <div className="table-header">
+            <ul className="table-header">
                 <div className="range-container">
                     <span>Top{" "} <input type="text"value={rangeNumber} onChange={(e) => setrangeNumber(e.target.value)}/>
                     </span>
@@ -29,7 +32,8 @@ const Table = ({coinsData}) => {
                         <label htmlFor={element}>{element}</label>
                     </li>
                 ))}
-            </div>
+            </ul>
+            {coinsData && coinsData.slice(0, rangeNumber).map((coin, index) => <Tableline index={index} coin={coin}/>)}
         </div>
     );
 };
