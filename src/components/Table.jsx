@@ -119,7 +119,7 @@ const Table = ({coinsData}) => {
                     default:
                       null;
                   }
-            }).map((coin, index) => <Tableline index={index} coin={coin}/>)}
+            }).map((coin, index) => <Tableline index={index} coin={coin} key={index}/>)}
         </div>
     );
 };
