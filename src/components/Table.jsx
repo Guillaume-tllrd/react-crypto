@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Tableline from './TableLine';
 import ToTop from './ToTop';
+import { useSelector } from 'react-redux';
+import { isStableCoin } from './Utils';
 
 
 
@@ -10,7 +12,11 @@ const Table = ({coinsData}) => {
     const [orderBy, setOrderBy] = useState("");
     // on va map tous les header du tabeau(qui seront des input de type radio) donc on les mets dans un array:
     const tableHeader = ["Prix", "MarketCap", "Volume", "1h", "1j", "1s", "1m", "6m", "1a", "ATH"]
-    
+    // pour envoyer une action on a useDispatch et pour recevoir une action il faut utiliser useSelector: on passe en paramètre state stocké dans le stableReducer
+    const showStable = useSelector((state) => state.stableReducer.showStable);
+    // showfavlist est un useSelector qui récupère le state de listreducer et de showlist
+    const showFavList = useSelector((state) => state.listReducer.showList);
+    console.log(showFavList);
     return (
         <div className='table-container'>
             <ul className="table-header">
@@ -36,7 +42,29 @@ const Table = ({coinsData}) => {
                 ))}
             </ul>
             {/* Pour le tri on fait avec switch en fonction de la var qu'on a créé(orderBy) dans le cas du prix par ex tu me return du + grd au + petit et si tu reclique dessus tu as Prixreverse donc tu m'affiches l'inverse */}
-            {coinsData && coinsData.slice(0, rangeNumber).sort((a,b) => {
+            {coinsData && coinsData.slice(0, rangeNumber).filter((coin) => {
+              // si c'est true rien ne change sinon ca enelev les stables coin
+              if(showStable){
+                return coin;
+              } else {
+                if(isStableCoin(coin.symbol)){
+                  return coin
+                }
+              }
+            }).filter((coin) => {
+              // je remet un filter pour les favList en allant chercher les données dans le local storage et comme c'est stocké comme un string on va split en mettant une virgule
+              if(showFavList){
+                let list = window.localStorage.coinList.split(",");
+                console.log(list);
+                // si dans la list includ des coins tu me les return
+                if(list.includes(coin.id)){
+                  return coin;
+                }
+              } else {
+                return coin;
+              }
+            })
+            .sort((a,b) => {
                 switch (orderBy) {
                     case "Prix":
                       return b.current_price - a.current_price;

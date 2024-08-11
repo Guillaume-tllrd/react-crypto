@@ -13,9 +13,11 @@ const StarIcon = ({coinId}) => {
             // si jamais le coinId qu'on a récupéré en props depuis TableLine est dans le tableau alors le like tu me le passe sur true:
             if(favList.includes(coinId)){
                 setLike(true)
+            } else {
+                setLike(false)
             }
         }
-     },[])
+     },[coinId])
     
      function idChecker(id){
         let favList = null;

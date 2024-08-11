@@ -46,7 +46,7 @@ useEffect(() => {
               chartData.push({
                 name: coinsdata[i].symbol.toUpperCase() + " " + coinsdata[i].market_cap_change_percentage_24h.toFixed(1) + "%",
                 size: coinsdata[i].market_cap,
-                fill: colorPicker(coinsdata[i].price_change_percentage_24h)
+                fill: colorPicker(coinsdata[i].market_cap_change_percentage_24h)
             });   
             }
            
